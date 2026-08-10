@@ -22,7 +22,6 @@
             --accent-glow: rgba(0, 200, 150, 0.25);
             --text: #e0e0e6;
             --text-muted: #6b6f82;
-            --danger: #ff4d6a;
         }
 
         html, body {
@@ -33,7 +32,6 @@
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
-        /* ===== IFRAME CONTAINER ===== */
         .iframe-container {
             width: 100%;
             height: 100vh;
@@ -55,7 +53,6 @@
             opacity: 0.4;
         }
 
-        /* ===== LOADING INDICATOR ===== */
         .loader-bar {
             position: fixed;
             top: 0;
@@ -78,7 +75,6 @@
             transition: width 0.2s ease;
         }
 
-        /* ===== BOTTOM NAVIGATION ===== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -127,21 +123,20 @@
         }
 
         .nav-item .icon-wrap i {
-            font-size: 18px;
+            font-size: 17px;
             color: var(--text-muted);
             transition: color 0.25s ease, transform 0.25s ease;
         }
 
         .nav-item .label {
-            font-size: 10px;
+            font-size: 9.5px;
             font-weight: 600;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
             color: var(--text-muted);
             transition: color 0.25s ease;
             line-height: 1;
         }
 
-        /* ===== AKTIF ===== */
         .nav-item.active .icon-wrap {
             background: var(--accent-glow);
         }
@@ -155,7 +150,6 @@
             color: var(--accent);
         }
 
-        /* Indikator garis atas */
         .nav-item.active::before {
             content: '';
             position: absolute;
@@ -175,7 +169,6 @@
             to { width: 28px; opacity: 1; }
         }
 
-        /* ===== BADGE untuk Cashier ===== */
         .nav-item .badge {
             position: absolute;
             top: 2px;
@@ -197,7 +190,6 @@
             display: none;
         }
 
-        /* ===== PAGE TITLE TOAST ===== */
         .page-toast {
             position: fixed;
             top: 12px;
@@ -228,32 +220,23 @@
             color: var(--accent);
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (min-width: 768px) {
             :root {
                 --nav-height: 70px;
             }
-
             .nav-item .icon-wrap i {
-                font-size: 20px;
+                font-size: 19px;
             }
-
             .nav-item .label {
-                font-size: 11px;
+                font-size: 10.5px;
             }
         }
 
-        @media (min-width: 1024px) {
-            /* Opsi: pindah nav ke samping untuk desktop */
-        }
-
-        /* Safe area untuk iPhone notch */
         @supports (padding-bottom: env(safe-area-inset-bottom)) {
             .bottom-nav {
                 padding-bottom: env(safe-area-inset-bottom);
                 height: calc(var(--nav-height) + env(safe-area-inset-bottom));
             }
-
             .iframe-container {
                 padding-bottom: calc(var(--nav-height) + env(safe-area-inset-bottom));
             }
@@ -262,16 +245,13 @@
 </head>
 <body>
 
-    <!-- Loading Bar -->
     <div class="loader-bar" id="loaderBar"></div>
 
-    <!-- Toast Nama Halaman -->
     <div class="page-toast" id="pageToast">
         <i class="fa-solid fa-cash-register"></i>
         <span id="toastText">Cashier</span>
     </div>
 
-    <!-- Iframe -->
     <div class="iframe-container">
         <iframe
             id="app"
@@ -280,7 +260,6 @@
         </iframe>
     </div>
 
-    <!-- Bottom Navigation -->
     <nav class="bottom-nav" id="bottomNav">
         <div class="nav-item active" data-url="https://script.google.com/macros/s/AKfycbxzlieSZR11Gyyir_86h7o0YHmD1ahYYASoLRolTENdAp8TMn4plSzEfM8H4boqB8UX/exec" data-label="Cashier" data-icon="fa-solid fa-cash-register">
             <span class="badge"></span>
@@ -310,6 +289,13 @@
             </div>
             <span class="label">Tebus Murah</span>
         </div>
+
+        <div class="nav-item" data-url="https://cashier05.github.io/Schedule-LMI-05/" data-label="Schedule" data-icon="fa-solid fa-calendar-days">
+            <div class="icon-wrap">
+                <i class="fa-solid fa-calendar-days"></i>
+            </div>
+            <span class="label">Schedule</span>
+        </div>
     </nav>
 
     <script>
@@ -320,7 +306,6 @@
         const navItems = document.querySelectorAll('.nav-item');
         let toastTimer = null;
 
-        // Fungsi tampilkan toast nama halaman
         function showToast(label, iconClass) {
             clearTimeout(toastTimer);
             toastText.textContent = label;
@@ -331,10 +316,8 @@
             }, 1800);
         }
 
-        // Fungsi loading bar
         function startLoading() {
             loaderBar.className = 'loader-bar';
-            // Trigger reflow
             void loaderBar.offsetWidth;
             loaderBar.classList.add('active');
         }
@@ -347,24 +330,19 @@
             }, 400);
         }
 
-        // Event klik navigasi
         navItems.forEach(item => {
             item.addEventListener('click', function() {
                 const url = this.dataset.url;
                 const label = this.dataset.label;
                 const icon = this.dataset.icon;
 
-                // Jika sudah aktif, abaikan
                 if (this.classList.contains('active')) return;
 
-                // Update active state
                 navItems.forEach(n => n.classList.remove('active'));
                 this.classList.add('active');
 
-                // Tampilkan toast
                 showToast(label, icon);
 
-                // Ganti iframe src
                 iframe.classList.add('loading');
                 startLoading();
 
@@ -375,7 +353,6 @@
 
                 iframe.src = url;
 
-                // Fallback: jika onload tidak terpicu dalam 4 detik
                 setTimeout(() => {
                     iframe.classList.remove('loading');
                     finishLoading();
@@ -383,7 +360,6 @@
             });
         });
 
-        // Deteksi back button browser — kembali ke Cashier
         window.addEventListener('popstate', function(e) {
             if (iframe.src !== navItems[0].dataset.url) {
                 navItems.forEach(n => n.classList.remove('active'));
@@ -393,7 +369,6 @@
             }
         });
 
-        // Tambah history entry agar back button berfungsi
         history.replaceState({ page: 'cashier' }, '', '');
     </script>
 </body>
